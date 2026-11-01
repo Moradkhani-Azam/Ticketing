@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath zip gd calendar \
+    && docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath zip gd calendar opcache \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 
@@ -31,6 +31,8 @@ COPY composer.json composer.lock ./
 
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/php.ini
 
 COPY docker/supervisor/supervisord.conf \
      /etc/supervisor/supervisord.conf
